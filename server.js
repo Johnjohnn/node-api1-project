@@ -1,22 +1,33 @@
-// first step WE NEED TO CREATE A SERVER 
-const http =  require("http")
-// server will need a function and 2 parameters request and response , the request parameter allows us to make request and the response allows us to set data and build a response.
-// and sometimes you will see them as  (req , res)
-const server = http.createServer((req, res) =>{
-// use 'req' to get information about the http request 
-// use "res" to send informantion back to the caller to the browser 
-
-
-  // send back a "success" status code 
-  res.statusCode = 200
-  // tell the browser we're sending back HTML
-  res.setHeader("Content-Type", "text/html")
-
-  res.write("<h1>Hello, World</h1>")
-
-  // send this build response out into the internet 
-  res.end()
+// this import is now pulling from node_module instead of the Node stdlib
+const express = require("express")
+const db = require("./database")
+// create an express server instance 
+const server = express()
+// ----------------------------------------------------------------END POINTS START FROM HERE --------------------------------------------------------------------------------
+server.get("/api/users" , (req, res) =>{
+res.json({message: "Hello, Jonathan"})
 })
+
+server.get("/users", (req, res ) =>{
+     // simulate a real call to a database to fetch data  THIS ENDPOINT RETURNS AN ARRAY OF USERS . 
+   const  users = db.getUsers()
+
+    res.json(users)
+})
+server.get("/users/:id", (req, res) => {
+	const id = req.params.id
+    const user = db.getUserById(id)
+    
+// make sure user exists before we try to send it back
+if (user) {
+    res.json(user)
+} else {
+    res.status(404).json({
+        message: "User not found",
+    })
+}
+
+
 // web server need to be continously listening  otherwise the front end wotn work 
 server.listen(8080, () => {
 console.log("server started")

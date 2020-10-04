@@ -12,7 +12,7 @@ const server = http.createServer((req, res) =>{
   // tell the browser we're sending back HTML
   res.setHeader("Content-Type", "text/html")
 
-  res.write("<h1>Hello, World</h1>")
+  res.write("<h1>Hello, john</h1>")
 
   // send this build response out into the internet 
   res.end()
