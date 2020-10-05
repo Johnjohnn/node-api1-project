@@ -14,7 +14,7 @@ res.json({message: "Hello, Jonathan"})
 })
 
 server.get("/api/users", (req, res ) =>{
-     // simulate a real call to a database to fetch data  THIS ENDPOINT RETURNS AN ARRAY OF USERS .
+     //  THIS ENDPOINT RETURNS AN ARRAY OF USERS .
    const  users = db.getUsers()
 
     res.json(users)
@@ -28,7 +28,7 @@ server.get("/api/users/:id", (req, res) => {
 		res.json(user)
 	} else {
 		res.status(404).json({
-			message: "User not found",
+			 message: "The user with the specified ID does not exist.",
 		})
     }
  // ----------------------------------- POST ENDPOINT ------------------------------------------------------------------------------------
@@ -43,14 +43,37 @@ server.get("/api/users/:id", (req, res) => {
 })
 // --------------------------------------------- DELETE ENDPOINT ----------------------------------------------------------------------------
 server.delete("/api/users/:id" , (req, res) =>{
-
-
+    const id = req.params.id 
+    const user = db.getUserById(id)
+    if (user) {
+        db.deleteUser(id)
+        // succesful emty response 
+        res.status(204).end()
+    }else {
+        res.status(500).json({
+            message:"The user with the specified ID does not exist."
+        })
+        
+        }
+        
 })
-// --------------------------------------------- DELETE ENDPOINT ----------------------------------------------------------------------------
+// --------------------------------------------- PUT or UPDATE ENDPOINT ----------------------------http://localhost:8080/api/users/1
 server.put("/api/users/:id" , (req, res) =>{
+const id = req.params.id 
+const user = db.getUserById(id)
+if (user) {
+  const updatedUser =    db.updateUser(id, {
+          name:req.body.name,
+      })
+      res.json(updatedUser)
+}else {
+res.status(404).json({
+    message:"The user with the specified ID does not exist."
+})
+
+}
 
 
-    
 })
 
 // ----------------------------------------------------END POINTS END FROM HERE ----------------------------------------------------------------------------------------------------
